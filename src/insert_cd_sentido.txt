@@ -1,0 +1,4 @@
+INSERT INTO cd_sentido (cd, sentido) VALUES (1, 'Desembarcados');
+INSERT INTO cd_sentido (cd, sentido) VALUES (2, 'Embarcados');
+INSERT INTO cd_sentido (cd, sentido) VALUES (3, 'Não Informado');
+

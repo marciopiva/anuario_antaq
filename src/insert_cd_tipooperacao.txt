@@ -1,0 +1,6 @@
+INSERT INTO cd_tipooperacao (cd, tipooperacao) VALUES (1, 'Marinha');
+INSERT INTO cd_tipooperacao (cd, tipooperacao) VALUES (2, 'Movimentação da Carga');
+INSERT INTO cd_tipooperacao (cd, tipooperacao) VALUES (3, 'Apoio');
+INSERT INTO cd_tipooperacao (cd, tipooperacao) VALUES (4, 'Misto');
+INSERT INTO cd_tipooperacao (cd, tipooperacao) VALUES (5, 'Abastecimento');
+

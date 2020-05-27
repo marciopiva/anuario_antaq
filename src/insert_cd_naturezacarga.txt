@@ -1,0 +1,5 @@
+INSERT INTO cd_naturezacarga (cd, naturezacarga) VALUES (1, 'Granel Líquido e Gasoso');
+INSERT INTO cd_naturezacarga (cd, naturezacarga) VALUES (2, 'Carga Geral');
+INSERT INTO cd_naturezacarga (cd, naturezacarga) VALUES (3, 'Granel Sólido');
+INSERT INTO cd_naturezacarga (cd, naturezacarga) VALUES (4, 'Carga Conteinerizada');
+

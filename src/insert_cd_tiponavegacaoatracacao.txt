@@ -1,0 +1,6 @@
+INSERT INTO cd_tiponavegacaoatracacao (cd, tiponavegacaoatracacao) VALUES (1, 'Apoio Portuário');
+INSERT INTO cd_tiponavegacaoatracacao (cd, tiponavegacaoatracacao) VALUES (2, 'Cabotagem');
+INSERT INTO cd_tiponavegacaoatracacao (cd, tiponavegacaoatracacao) VALUES (3, 'Longo Curso');
+INSERT INTO cd_tiponavegacaoatracacao (cd, tiponavegacaoatracacao) VALUES (4, 'Interior');
+INSERT INTO cd_tiponavegacaoatracacao (cd, tiponavegacaoatracacao) VALUES (5, 'Apoio Marítimo');
+

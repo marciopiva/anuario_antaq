@@ -1,0 +1,13 @@
+CREATE TABLE cd_ano (cd INTEGER, ano TEXT);
+CREATE TABLE cd_berco (cd INTEGER, berco TEXT);
+CREATE TABLE cd_cdmercadoria (cd INTEGER, cdmercadoria TEXT);
+CREATE TABLE cd_cdtup (cd INTEGER, cdtup TEXT);
+CREATE TABLE cd_mes (cd INTEGER, mes TEXT);
+CREATE TABLE cd_naturezacarga (cd INTEGER, naturezacarga TEXT);
+CREATE TABLE cd_origemdestino (cd INTEGER, origemdestino TEXT);
+CREATE TABLE cd_portoatracacao (cd INTEGER, portoatracacao TEXT);
+CREATE TABLE cd_sentido (cd INTEGER, sentido TEXT);
+CREATE TABLE cd_terminal (cd INTEGER, terminal TEXT);
+CREATE TABLE cd_tiponavegacaoatracacao (cd INTEGER, tiponavegacaoatracacao TEXT);
+CREATE TABLE cd_tipooperacao (cd INTEGER, tipooperacao TEXT);
+

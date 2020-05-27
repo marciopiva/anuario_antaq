@@ -1,0 +1,5 @@
+INSERT INTO cd_ano (cd, ano) VALUES (1, '2016');
+INSERT INTO cd_ano (cd, ano) VALUES (2, '2017');
+INSERT INTO cd_ano (cd, ano) VALUES (3, '2018');
+INSERT INTO cd_ano (cd, ano) VALUES (4, '2019');
+

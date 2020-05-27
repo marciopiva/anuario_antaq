@@ -1,0 +1,13 @@
+INSERT INTO cd_mes (cd, mes) VALUES (1, 'jan');
+INSERT INTO cd_mes (cd, mes) VALUES (2, 'fev');
+INSERT INTO cd_mes (cd, mes) VALUES (3, 'mar');
+INSERT INTO cd_mes (cd, mes) VALUES (4, 'abr');
+INSERT INTO cd_mes (cd, mes) VALUES (5, 'mai');
+INSERT INTO cd_mes (cd, mes) VALUES (6, 'jun');
+INSERT INTO cd_mes (cd, mes) VALUES (7, 'jul');
+INSERT INTO cd_mes (cd, mes) VALUES (8, 'ago');
+INSERT INTO cd_mes (cd, mes) VALUES (9, 'set');
+INSERT INTO cd_mes (cd, mes) VALUES (10, 'out');
+INSERT INTO cd_mes (cd, mes) VALUES (11, 'nov');
+INSERT INTO cd_mes (cd, mes) VALUES (12, 'dez');
+

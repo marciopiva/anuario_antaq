@@ -1,0 +1,234 @@
+select c.*,
+	   a.*,
+	   t.*
+  from carga c,
+	   atracacao a,
+	   temposatracacao t
+ where a.idatracacao = c.idatracacao
+   and t.idatracacao = a.idatracacao
+ limit 10
+
+
+select a.idatracacao, a.cdtup, a.berco, a.portoatracacao, a.ano, a.mes, a.tipooperacao, a.tiponavegacaoatracacao, a.terminal, a.nacionalidadearmador, 
+	   t.tesperaatracacao, t.tesperacainicioop, t.toperacao, t.tesperadesatracacao, t.tatracado, t.testadia,
+	   c.idcarga, c.origem, c.destino, c.cdmercadoria, c.naturezacarga, c.teu, c.qtcarga, c.pesocargabruta, c.sentido,
+	   ifnull(z.cdmercadoria,'') cdmercadoria_cntr, ifnull(z.pesocarga,'') pesocarga_cntr
+  from atracacao a,
+       temposatracacao t,
+	   carga c left join cargaconteinerizada z using(idcarga)
+ where a.idatracacao = '842405'
+   and t.idatracacao = a.idatracacao
+   and a.portoatracacao = 'Santos'
+   and c.idatracacao = a.idatracacao
+ --limit 10
+
+
+drop view vw_dataset_00;
+
+create view vw_dataset_00 as 
+select a.idatracacao, a.cdtup, a.berco, a.portoatracacao, a.ano, a.mes, a.tipooperacao, a.tiponavegacaoatracacao, a.terminal, a.nacionalidadearmador, 
+	   t.tesperaatracacao, t.tesperacainicioop, t.toperacao, t.tesperadesatracacao, t.tatracado, t.testadia,
+	   c.idcarga, c.origem, c.destino, c.cdmercadoria, c.naturezacarga, c.teu, c.qtcarga, c.pesocargabruta, c.sentido,
+	   ifnull(z.cdmercadoria,'') cdmercadoria_cntr, ifnull(z.pesocarga,'') pesocarga_cntr
+  from atracacao a,
+       temposatracacao t,
+	   carga c left join cargaconteinerizada z using(idcarga)
+ where t.idatracacao = a.idatracacao
+   and c.idatracacao = a.idatracacao;
+
+
+CREATE VIEW vw_dataset_01 AS
+select a.idatracacao, 
+	   a.cdtup,
+	   tu.cd cd_cdtup,
+	   a.berco, 
+	   cb.cd cd_berco, 
+	   a.portoatracacao,
+	   cp.cd cd_portoatracacao,
+	   a.ano, 
+	   ca.cd cd_ano,
+	   a.mes, 
+	   cm.cd cd_mes,
+	   a.tipooperacao, 
+	   ct3.cd cd_tipooperacao,
+	   a.tiponavegacaoatracacao, 
+	   ct2.cd cd_tiponavegacaoatracao,
+	   a.terminal, 
+	   ct.cd cd_terminal,
+	   a.nacionalidadearmador, 
+	   t.tesperaatracacao, 
+	   t.tesperacainicioop, 
+	   t.toperacao, 
+	   t.tesperadesatracacao, 
+	   t.tatracado, 
+	   t.testadia,
+	   c.idcarga, 
+	   c.origem,
+	   co1.cd cd_origem,
+	   c.destino, 
+	   co2.cd cd_destino,
+	   c.cdmercadoria, 
+	   cc1.cd cd_cdmercadoria,
+	   c.naturezacarga, 
+	   cn.cd cd_naturezacarga,
+	   c.teu, 
+	   c.qtcarga, 
+	   c.pesocargabruta, 
+	   c.sentido,
+	   cs.cd cd_sentido,
+	   ifnull(z.cdmercadoria,'') cdmercadoria_cntr, 
+	   cc2.cd cd_cdmercadoria_cntr,
+	   ifnull(z.pesocarga,'') pesocarga_cntr
+  from atracacao a,
+  	   cd_ano ca,
+  	   cd_berco cb,
+  	   cd_cdmercadoria cc1,
+  	   cd_cdmercadoria cc2,
+  	   cd_cdtup tu,
+  	   cd_mes cm,
+  	   cd_naturezacarga cn,
+  	   cd_origemdestino co1,
+  	   cd_origemdestino co2,
+  	   cd_portoatracacao cp,
+  	   cd_sentido cs,
+  	   cd_terminal ct,
+  	   cd_tiponavegacaoatracacao ct2,
+  	   cd_tipooperacao ct3,
+       temposatracacao t,
+	   carga c left join cargaconteinerizada z using(idcarga)
+ where ca.ano = a.ano 
+   and cb.berco = a.berco 
+   and tu.cdtup = a.cdtup 
+   and cm.mes = a.mes 
+   and cp.portoatracacao = a.portoatracacao 
+   and ct.terminal = a.terminal 
+   and ct2.tiponavegacaoatracacao = a.tiponavegacaoatracacao 
+   and ct3.tipooperacao = a.tipooperacao 
+   and t.idatracacao = a.idatracacao
+   and c.idatracacao = a.idatracacao
+   and cc1.cdmercadoria = c.cdmercadoria 
+   and cn.naturezacarga = c.naturezacarga 
+   and co1.origemdestino = c.origem 
+   and co2.origemdestino = c.destino 
+   and cs.sentido = c.sentido 
+   and cc2.cdmercadoria = z.cdmercadoria;
+
+CREATE VIEW vw_dataset_02 AS
+select tu.cd cd_cdtup,
+	   cb.cd cd_berco, 
+	   cp.cd cd_portoatracacao,
+	   ca.cd cd_ano,
+	   cm.cd cd_mes,
+	   ct3.cd cd_tipooperacao,
+	   ct2.cd cd_tiponavegacaoatracao,
+	   ct.cd cd_terminal,
+	   a.nacionalidadearmador, 
+	   t.tesperaatracacao, 
+	   t.tesperacainicioop, 
+	   t.toperacao, 
+	   t.tesperadesatracacao, 
+	   t.tatracado, 
+	   t.testadia,
+	   co1.cd cd_origem,
+	   co2.cd cd_destino,
+	   cc1.cd cd_cdmercadoria,
+	   cn.cd cd_naturezacarga,
+	   c.teu, 
+	   c.qtcarga, 
+	   c.pesocargabruta, 
+	   cs.cd cd_sentido,
+	   cc2.cd cd_cdmercadoria_cntr,
+	   ifnull(z.pesocarga,'') pesocarga_cntr
+  from atracacao a,
+  	   cd_ano ca,
+  	   cd_berco cb,
+  	   cd_cdmercadoria cc1,
+  	   cd_cdmercadoria cc2,
+  	   cd_cdtup tu,
+  	   cd_mes cm,
+  	   cd_naturezacarga cn,
+  	   cd_origemdestino co1,
+  	   cd_origemdestino co2,
+  	   cd_portoatracacao cp,
+  	   cd_sentido cs,
+  	   cd_terminal ct,
+  	   cd_tiponavegacaoatracacao ct2,
+  	   cd_tipooperacao ct3,
+       temposatracacao t,
+	   carga c left join cargaconteinerizada z using(idcarga)
+ where ca.ano = a.ano 
+   and cb.berco = a.berco 
+   and tu.cdtup = a.cdtup 
+   and cm.mes = a.mes 
+   and cp.portoatracacao = a.portoatracacao 
+   and ct.terminal = a.terminal 
+   and ct2.tiponavegacaoatracacao = a.tiponavegacaoatracacao 
+   and ct3.tipooperacao = a.tipooperacao 
+   and t.idatracacao = a.idatracacao
+   and c.idatracacao = a.idatracacao
+   and cc1.cdmercadoria = c.cdmercadoria 
+   and cn.naturezacarga = c.naturezacarga 
+   and co1.origemdestino = c.origem 
+   and co2.origemdestino = c.destino 
+
+
+
+select tu.cd cd_cdtup,
+	   cb.cd cd_berco, 
+	   cp.cd cd_portoatracacao,
+	   ca.cd cd_ano,
+	   cm.cd cd_mes,
+	   ct3.cd cd_tipooperacao,
+	   ct2.cd cd_tiponavegacaoatracao,
+	   ct.cd cd_terminal,
+	   a.nacionalidadearmador, 
+	   t.tesperaatracacao, 
+	   t.tesperacainicioop, 
+	   t.toperacao, 
+	   t.tesperadesatracacao, 
+	   t.tatracado, 
+	   t.testadia,
+	   sum(c.teu) teu,
+	   sum(c.qtcarga) qtcarga,
+	   sum(c.pesocargabruta) pesocargabruta,
+	   sum(z.pesocarga) pesocarga
+  from atracacao a,
+  	   cd_ano ca,
+  	   cd_berco cb,
+  	   cd_cdtup tu,
+  	   cd_mes cm,
+  	   cd_portoatracacao cp,
+  	   cd_terminal ct,
+  	   cd_tiponavegacaoatracacao ct2,
+  	   cd_tipooperacao ct3,
+       temposatracacao t,
+	   carga c left join cargaconteinerizada z using(idcarga)
+ where ca.ano = a.ano 
+   and cb.berco = a.berco 
+   and tu.cdtup = a.cdtup 
+   and cm.mes = a.mes 
+   and cp.portoatracacao = a.portoatracacao 
+   and ct.terminal = a.terminal 
+   and ct2.tiponavegacaoatracacao = a.tiponavegacaoatracacao 
+   and ct3.tipooperacao = a.tipooperacao 
+   and t.idatracacao = a.idatracacao
+   and c.idatracacao = a.idatracacao
+ group by cd_cdtup,
+	   	  cd_berco, 
+	      cd_portoatracacao,
+	      cd_ano,
+	      cd_mes,
+	      cd_tipooperacao,
+	      cd_tiponavegacaoatracao,
+	      cd_terminal,
+	      nacionalidadearmador, 
+	      tesperaatracacao, 
+	      tesperacainicioop, 
+	      toperacao, 
+	      tesperadesatracacao, 
+	      tatracado, 
+	      testadia
+   and cs.sentido = c.sentido 
+   and cc2.cdmercadoria = z.cdmercadoria;
+
+
