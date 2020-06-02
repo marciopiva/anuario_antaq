@@ -170,9 +170,12 @@ select tu.cd cd_cdtup,
    and cn.naturezacarga = c.naturezacarga 
    and co1.origemdestino = c.origem 
    and co2.origemdestino = c.destino 
+   and cs.sentido = c.sentido 
+   and cc2.cdmercadoria = z.cdmercadoria;
 
 
 
+CREATE VIEW vw_dataset_03 AS
 select tu.cd cd_cdtup,
 	   cb.cd cd_berco, 
 	   cp.cd cd_portoatracacao,
@@ -182,16 +185,9 @@ select tu.cd cd_cdtup,
 	   ct2.cd cd_tiponavegacaoatracao,
 	   ct.cd cd_terminal,
 	   a.nacionalidadearmador, 
-	   t.tesperaatracacao, 
-	   t.tesperacainicioop, 
 	   t.toperacao, 
-	   t.tesperadesatracacao, 
-	   t.tatracado, 
-	   t.testadia,
 	   sum(c.teu) teu,
-	   sum(c.qtcarga) qtcarga,
-	   sum(c.pesocargabruta) pesocargabruta,
-	   sum(z.pesocarga) pesocarga
+	   sum(c.pesocargabruta) pesocargabruta
   from atracacao a,
   	   cd_ano ca,
   	   cd_berco cb,
@@ -201,8 +197,8 @@ select tu.cd cd_cdtup,
   	   cd_terminal ct,
   	   cd_tiponavegacaoatracacao ct2,
   	   cd_tipooperacao ct3,
-       temposatracacao t,
-	   carga c left join cargaconteinerizada z using(idcarga)
+           temposatracacao t,
+	   carga c 
  where ca.ano = a.ano 
    and cb.berco = a.berco 
    and tu.cdtup = a.cdtup 
@@ -222,13 +218,329 @@ select tu.cd cd_cdtup,
 	      cd_tiponavegacaoatracao,
 	      cd_terminal,
 	      nacionalidadearmador, 
-	      tesperaatracacao, 
-	      tesperacainicioop, 
-	      toperacao, 
-	      tesperadesatracacao, 
-	      tatracado, 
-	      testadia
-   and cs.sentido = c.sentido 
-   and cc2.cdmercadoria = z.cdmercadoria;
+	      toperacao;
 
 
+
+CREATE VIEW vw_dataset_gs as
+select a.idatracacao,
+	   tu.cd cd_cdtup,
+	   cb.cd cd_berco, 
+	   cp.cd cd_portoatracacao,
+	   ca.cd cd_ano,
+	   cm.cd cd_mes,
+	   ct3.cd cd_tipooperacao,
+	   ct2.cd cd_tiponavegacaoatracao,
+	   ct.cd cd_terminal,
+	   a.nacionalidadearmador,
+	   
+	   case instr(t.toperacao, ',')
+	   when 0 then t.toperacao
+	   else substr(t.toperacao, 1, instr(t.toperacao, ',')-1)
+	   end toperacao,
+	   
+	   case instr(t.tesperaatracacao, ',')
+	   when 0 then t.tesperaatracacao
+	   else substr(t.tesperaatracacao, 1, instr(t.tesperaatracacao, ',')-1)
+	   end tesperaatracacao,
+	   
+	   case instr(t.testadia, ',')
+	   when 0 then t.testadia
+	   else substr(t.testadia, 1, instr(t.testadia, ',')-1)
+	   end testadia,
+	   
+	   sum(
+	   case instr(c.teu, ',')
+	   when 0 then c.teu
+	   else substr(c.teu, 1, instr(c.teu, ',')-1)
+	   end
+	   ) teu,
+	   	   
+	   sum(
+	   case instr(c.pesocargabruta, ',')
+	   when 0 then c.pesocargabruta 
+	   else substr(c.pesocargabruta, 1, instr(c.pesocargabruta, ',')-1)
+	   end
+	   ) pesocargabruta
+  from (select distinct(c.idatracacao)
+          from carga c,
+               cd_naturezacarga cn
+         where cn.naturezacarga  = c.naturezacarga 
+           and cn.cd = 3 ) gs, --Granel Sólido 
+       atracacao a,
+  	   cd_ano ca,
+  	   cd_berco cb,
+  	   cd_cdtup tu,
+  	   cd_mes cm,
+  	   cd_portoatracacao cp,
+  	   cd_terminal ct,
+  	   cd_tiponavegacaoatracacao ct2,
+  	   cd_tipooperacao ct3,
+       temposatracacao t,
+	   carga c 
+ where a.idatracacao = gs.idatracacao
+   and ca.ano = a.ano 
+   and cb.berco = a.berco 
+   and tu.cdtup = a.cdtup 
+   and cm.mes = a.mes 
+   and cp.portoatracacao = a.portoatracacao 
+   and ct.terminal = a.terminal 
+   and ct2.tiponavegacaoatracacao = a.tiponavegacaoatracacao 
+   and ct3.tipooperacao = a.tipooperacao 
+   and t.idatracacao = a.idatracacao
+   and c.idatracacao = a.idatracacao
+ group by t.idatracacao,
+	   	  tu.cd,
+	      cb.cd, 
+	      cp.cd,
+	      ca.cd,
+	      cm.cd,
+	      ct3.cd,
+	      ct2.cd,
+	      ct.cd,
+	      a.nacionalidadearmador,
+	      t.toperacao,
+	      t.tesperaatracacao,
+	      t.testadia;
+
+
+CREATE VIEW vw_dataset_gl as
+select a.idatracacao,
+	   tu.cd cd_cdtup,
+	   cb.cd cd_berco, 
+	   cp.cd cd_portoatracacao,
+	   ca.cd cd_ano,
+	   cm.cd cd_mes,
+	   ct3.cd cd_tipooperacao,
+	   ct2.cd cd_tiponavegacaoatracao,
+	   ct.cd cd_terminal,
+	   a.nacionalidadearmador,
+	   
+	   case instr(t.toperacao, ',')
+	   when 0 then t.toperacao
+	   else substr(t.toperacao, 1, instr(t.toperacao, ',')-1)
+	   end toperacao,
+	   
+	   case instr(t.tesperaatracacao, ',')
+	   when 0 then t.tesperaatracacao
+	   else substr(t.tesperaatracacao, 1, instr(t.tesperaatracacao, ',')-1)
+	   end tesperaatracacao,
+	   
+	   case instr(t.testadia, ',')
+	   when 0 then t.testadia
+	   else substr(t.testadia, 1, instr(t.testadia, ',')-1)
+	   end testadia,
+	   
+	   sum(
+	   case instr(c.teu, ',')
+	   when 0 then c.teu
+	   else substr(c.teu, 1, instr(c.teu, ',')-1)
+	   end
+	   ) teu,
+	   	   
+	   sum(
+	   case instr(c.pesocargabruta, ',')
+	   when 0 then c.pesocargabruta 
+	   else substr(c.pesocargabruta, 1, instr(c.pesocargabruta, ',')-1)
+	   end
+	   ) pesocargabruta
+  from (select distinct(c.idatracacao)
+          from carga c,
+               cd_naturezacarga cn
+         where cn.naturezacarga  = c.naturezacarga 
+           and cn.cd = 1 ) gl, --Granel Líquido e Gasoso 
+       atracacao a,
+  	   cd_ano ca,
+  	   cd_berco cb,
+  	   cd_cdtup tu,
+  	   cd_mes cm,
+  	   cd_portoatracacao cp,
+  	   cd_terminal ct,
+  	   cd_tiponavegacaoatracacao ct2,
+  	   cd_tipooperacao ct3,
+       temposatracacao t,
+	   carga c 
+ where a.idatracacao = gl.idatracacao
+   and ca.ano = a.ano 
+   and cb.berco = a.berco 
+   and tu.cdtup = a.cdtup 
+   and cm.mes = a.mes 
+   and cp.portoatracacao = a.portoatracacao 
+   and ct.terminal = a.terminal 
+   and ct2.tiponavegacaoatracacao = a.tiponavegacaoatracacao 
+   and ct3.tipooperacao = a.tipooperacao 
+   and t.idatracacao = a.idatracacao
+   and c.idatracacao = a.idatracacao
+ group by t.idatracacao,
+	   	  tu.cd,
+	      cb.cd, 
+	      cp.cd,
+	      ca.cd,
+	      cm.cd,
+	      ct3.cd,
+	      ct2.cd,
+	      ct.cd,
+	      a.nacionalidadearmador,
+	      t.toperacao,
+	      t.tesperaatracacao,
+	      t.testadia;
+
+
+CREATE VIEW vw_dataset_cg as
+select a.idatracacao,
+	   tu.cd cd_cdtup,
+	   cb.cd cd_berco, 
+	   cp.cd cd_portoatracacao,
+	   ca.cd cd_ano,
+	   cm.cd cd_mes,
+	   ct3.cd cd_tipooperacao,
+	   ct2.cd cd_tiponavegacaoatracao,
+	   ct.cd cd_terminal,
+	   a.nacionalidadearmador,
+	   
+	   case instr(t.toperacao, ',')
+	   when 0 then t.toperacao
+	   else substr(t.toperacao, 1, instr(t.toperacao, ',')-1)
+	   end toperacao,
+	   
+	   case instr(t.tesperaatracacao, ',')
+	   when 0 then t.tesperaatracacao
+	   else substr(t.tesperaatracacao, 1, instr(t.tesperaatracacao, ',')-1)
+	   end tesperaatracacao,
+	   
+	   case instr(t.testadia, ',')
+	   when 0 then t.testadia
+	   else substr(t.testadia, 1, instr(t.testadia, ',')-1)
+	   end testadia,
+	   
+	   sum(
+	   case instr(c.teu, ',')
+	   when 0 then c.teu
+	   else substr(c.teu, 1, instr(c.teu, ',')-1)
+	   end
+	   ) teu,
+	   	   
+	   sum(
+	   case instr(c.pesocargabruta, ',')
+	   when 0 then c.pesocargabruta 
+	   else substr(c.pesocargabruta, 1, instr(c.pesocargabruta, ',')-1)
+	   end
+	   ) pesocargabruta
+  from (select distinct(c.idatracacao)
+          from carga c,
+               cd_naturezacarga cn
+         where cn.naturezacarga  = c.naturezacarga 
+           and cn.cd in (2, 4) ) cg, --Carga Geral e Carga Conteinerizada  
+       atracacao a,
+  	   cd_ano ca,
+  	   cd_berco cb,
+  	   cd_cdtup tu,
+  	   cd_mes cm,
+  	   cd_portoatracacao cp,
+  	   cd_terminal ct,
+  	   cd_tiponavegacaoatracacao ct2,
+  	   cd_tipooperacao ct3,
+       temposatracacao t,
+	   carga c 
+ where a.idatracacao = cg.idatracacao
+   and ca.ano = a.ano 
+   and cb.berco = a.berco 
+   and tu.cdtup = a.cdtup 
+   and cm.mes = a.mes 
+   and cp.portoatracacao = a.portoatracacao 
+   and ct.terminal = a.terminal 
+   and ct2.tiponavegacaoatracacao = a.tiponavegacaoatracacao 
+   and ct3.tipooperacao = a.tipooperacao 
+   and t.idatracacao = a.idatracacao
+   and c.idatracacao = a.idatracacao
+ group by t.idatracacao,
+	   	  tu.cd,
+	      cb.cd, 
+	      cp.cd,
+	      ca.cd,
+	      cm.cd,
+	      ct3.cd,
+	      ct2.cd,
+	      ct.cd,
+	      a.nacionalidadearmador,
+	      t.toperacao,
+	      t.tesperaatracacao,
+	      t.testadia;
+
+select vd.cd_portoatracacao,
+       vd.cd_tipooperacao,
+       vd.cd_tiponavegacaoatracao,
+       vd.cd_ano,
+       vd.cd_mes,
+       vd.cd_terminal,
+       vd.cd_berco,
+       vd.nacionalidadearmador,
+       vd.teu,
+       vd.pesocargabruta,
+       vd.toperacao,
+       vd.tesperaatracacao,
+       vd.testadia 
+  from vw_dataset_cg vd 
+ where vd.cd_portoatracacao = 11 --Santos
+   and vd.cd_tipooperacao = 2 --Movimentação da Carga
+   and vd.cd_tiponavegacaoatracao = 3 --Longo Curso
+   and vd.teu > 0
+
+
+select vd.idatracacao,
+       1 as cd_tipocarga,
+       vd.cd_portoatracacao,
+       vd.cd_tipooperacao,
+       vd.cd_tiponavegacaoatracao,
+       vd.cd_ano,
+       vd.cd_mes,
+       vd.cd_terminal,
+       vd.cd_berco,
+       vd.nacionalidadearmador,
+       vd.teu,
+       vd.pesocargabruta,
+       vd.toperacao,
+       vd.tesperaatracacao,
+       vd.testadia 
+  from vw_dataset_cg vd 
+union all  
+select vd.idatracacao,
+       2 as cd_tipocarga,
+       vd.cd_portoatracacao,
+       vd.cd_tipooperacao,
+       vd.cd_tiponavegacaoatracao,
+       vd.cd_ano,
+       vd.cd_mes,
+       vd.cd_terminal,
+       vd.cd_berco,
+       vd.nacionalidadearmador,
+       vd.teu,
+       vd.pesocargabruta,
+       vd.toperacao,
+       vd.tesperaatracacao,
+       vd.testadia 
+  from vw_dataset_gs vd 
+union all
+select vd.idatracacao,
+       3 as cd_tipocarga,
+       vd.cd_portoatracacao,
+       vd.cd_tipooperacao,
+       vd.cd_tiponavegacaoatracao,
+       vd.cd_ano,
+       vd.cd_mes,
+       vd.cd_terminal,
+       vd.cd_berco,
+       vd.nacionalidadearmador,
+       vd.teu,
+       vd.pesocargabruta,
+       vd.toperacao,
+       vd.tesperaatracacao,
+       vd.testadia 
+  from vw_dataset_gl vd
+
+sqlite3 ../db/antaq.db
+sqlite> .headers on
+sqlite> .mode csv
+sqlite> .output atraca.csv
+sqlite> SELECT 
+sqlite> .quit
