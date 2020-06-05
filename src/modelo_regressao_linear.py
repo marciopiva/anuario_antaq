@@ -34,15 +34,17 @@ def treinar_modelo(modelo_rl, df, feature, label, epochs, batch_size, validation
 
 
 def plot_the_model(df, trained_weight, trained_bias, feature, label):
+    plt.figure()
     plt.xlabel(feature)
     plt.ylabel(label)
+    plt.suptitle('TRABALHO COM CONTAINERS - TEUs vs TEMPO DE OPERACAO')
 
     random_examples = df.sample(n=200)
     plt.scatter(random_examples[feature], random_examples[label])
 
     x0 = 0
     y0 = trained_bias
-    x1 = 10000
+    x1 = 6000
     y1 = trained_bias + (trained_weight * x1)
     plt.plot([x0, x1], [y0, y1], c='r')
 
@@ -51,7 +53,8 @@ def plot_the_model(df, trained_weight, trained_bias, feature, label):
 
 def plot_the_loss_curve(epochs, rmse):
     plt.figure()
-    plt.xlabel("Epoch")
+    plt.suptitle('TRABALHO COM CONTAINERS - TEUs vs TEMPO DE OPERACAO')
+    plt.xlabel("Epoca")
     plt.ylabel("Root Mean Squared Error")
 
     plt.plot(epochs, rmse, label="Loss")
@@ -151,8 +154,8 @@ weight, bias, epochs, rmse = treinar_modelo(modelo_rl, df_cg_cntr_treino,
                                             epocas, tamanho_batch, 
                                             split_validacao_percentual)
 
-print("\nThe learned weight for your model is %.4f" % weight)
-print("The learned bias for your model is %.4f\n" % bias )
+print("\nPeso:  %.4f" % weight)
+print('Inclinação/tendência: %.4f\n' % bias )
 
 plot_the_model(df_cg_cntr_treino, weight, bias, atributo, rotulo)
 plot_the_loss_curve(epochs, rmse)

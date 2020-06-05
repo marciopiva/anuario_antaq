@@ -65,7 +65,7 @@ def seta_faixa(df, coluna_ordem, coluna_faixa):
             row[coluna_faixa] = 10
 
 
-def analise_geral(df, rotulo):
+def analise_geral(df, rotulo, titulo):
     #alguns agrupamentos para visualização
     df_top_ano = df.groupby('cd_ano').agg({rotulo: [np.mean]})
     df_top_mes = df.groupby('cd_mes').agg({rotulo: [np.mean]})
@@ -75,7 +75,9 @@ def analise_geral(df, rotulo):
     df_teu_mes = df.groupby('cd_mes').agg({'teu': [np.sum]})
 
     #graficos gerais
-    _, axes = plt.subplots(nrows=3, ncols=2)
+    fig, axes = plt.subplots(nrows=3, ncols=2)
+    fig.suptitle(titulo + ' - Agrupamentos', fontsize=16)
+
     axes[0,0].set_title('Tempo vs Ano')
     axes[0,1].set_title('Tempo vs Mes')
     axes[1,0].set_title('Peso vs Ano')
@@ -89,18 +91,25 @@ def analise_geral(df, rotulo):
     df_pes_mes.plot(kind='line', ax=axes[1,1], legend=False, color='green')
     df_teu_ano.plot(kind='bar', ax=axes[2,0], legend=False, color='gray')
     df_teu_mes.plot(kind='line', ax=axes[2,1], legend=False, color='black')
+
     plt.show()
 
     #estatistica descritiva
     print('>>> antes')
     print(df[['toperacao', 'tesperaatracacao', 'testadia']].describe())
 
-    #olhando os histogramas
-    _, axes = plt.subplots(nrows=3, ncols=1)
+    #olhando os histogramas e boxplot
+    fig, axes = plt.subplots(nrows=3, ncols=2)
+    fig.suptitle(titulo + ' - Histogramas e BoxPlot >> antes', fontsize=16)
 
-    df.hist(column='toperacao', ax=axes[0])
-    df.hist(column='tesperaatracacao', ax=axes[1])
-    df.hist(column='testadia', ax=axes[2])
+    df.hist(column='toperacao', ax=axes[0, 0])
+    df.boxplot(column='toperacao', ax=axes[0, 1])
+
+    df.hist(column='tesperaatracacao', ax=axes[1, 0])
+    df.boxplot(column='tesperaatracacao', ax=axes[1, 1])
+
+    df.hist(column='testadia', ax=axes[2, 0])
+    df.boxplot(column='testadia', ax=axes[2, 1])
     plt.show()
 
     #eliminando outliers e criando 4 classes para trabalho com árvores de decisão - label: toperacao
@@ -118,21 +127,21 @@ def analise_geral(df, rotulo):
     seta_classe(df, 'testadia', 'classe_testadia')
     df = df.loc[df['classe_testadia'] != 5]
 
-    #criando faixas para atributos contínuos: teu e pesocargabruta
-    #df['faixa_teu'] = 0
-    #seta_faixa(df, 'teu', 'faixa_teu')
-    #df['faixa_pesocargabruta'] = 0
-    #seta_faixa(df, 'pesocargabruta', 'faixa_pesocargabruta')
-
     print('>>> depois')
     print(df[['toperacao', 'tesperaatracacao', 'testadia']].describe())
 
-    #revendo os histogramas
-    _, axes = plt.subplots(nrows=3, ncols=1)
+    #olhando os histogramas e boxplot
+    fig, axes = plt.subplots(nrows=3, ncols=2)
+    fig.suptitle(titulo + ' - Histogramas e BoxPlot >> depois', fontsize=16)
 
-    df.hist(column='toperacao', ax=axes[0])
-    df.hist(column='tesperaatracacao', ax=axes[1])
-    df.hist(column='testadia', ax=axes[2])
+    df.hist(column='toperacao', ax=axes[0, 0])
+    df.boxplot(column='toperacao', ax=axes[0, 1])
+
+    df.hist(column='tesperaatracacao', ax=axes[1, 0])
+    df.boxplot(column='tesperaatracacao', ax=axes[1, 1])
+
+    df.hist(column='testadia', ax=axes[2, 0])
+    df.boxplot(column='testadia', ax=axes[2, 1])
     plt.show()
 
     return df
@@ -218,7 +227,7 @@ print('*** TRABALHANDO COM CONTAINERS ***')
 print('**********************************')
 
 #análise geral
-df_cg_cntr = analise_geral(df_cg_cntr, 'toperacao')
+df_cg_cntr = analise_geral(df_cg_cntr, 'toperacao', 'TRABALHANDO COM CONTAINERS')
 
 #classificação com árvores
 classifica_arvore(df_cg_cntr, 'classe_toperacao')
@@ -231,7 +240,7 @@ print('*** TRABALHANDO COM CARGA SOLTA ***')
 print('***********************************')
 
 #análise geral
-df_cg_cs = analise_geral(df_cg_cs, 'toperacao')
+df_cg_cs = analise_geral(df_cg_cs, 'toperacao', 'TRABALHANDO COM CARGA SOLTA')
 
 #classificação com árvores
 classifica_arvore(df_cg_cs, 'classe_toperacao')
@@ -245,7 +254,7 @@ print('*** TRABALHANDO COM GRANEL SÓLIDO ***')
 print('*************************************')
 
 #análise geral
-df_gs = analise_geral(df_gs, 'toperacao')
+df_gs = analise_geral(df_gs, 'toperacao', 'TRABALHANDO COM GRANEL SÓLIDO')
 
 #classificação com árvores
 classifica_arvore(df_gs, 'classe_toperacao')

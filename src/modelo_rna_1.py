@@ -58,9 +58,6 @@ def create_model(my_learning_rate, atributos_entrada, atributos):
     # quatro classes de saída
     model.add(tf.keras.layers.Dense(units=4, activation='softmax', name='Camada_Saida'))     
                             
-    # Construct the layers into a model that TensorFlow can execute.  
-    # Notice that the loss function for multi-class classification
-    # is different than the loss function for binary classification.  
     model.compile(optimizer=tf.keras.optimizers.Adam(lr=my_learning_rate),
                   loss="sparse_categorical_crossentropy",
                   metrics=['accuracy'])
@@ -75,8 +72,6 @@ def train_model(model, train_features, train_label, epochs,
                         epochs=epochs, shuffle=True, 
                         validation_split=validation_split)
 
-    # To track the progression of training, gather a snapshot
-    # of the model's metrics at each epoch. 
     epochs = history.epoch
     hist = pd.DataFrame(history.history)
 
